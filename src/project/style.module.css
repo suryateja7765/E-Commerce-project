@@ -1,0 +1,15 @@
+
+ .mainHeading{
+   display: flex;
+    text-align: center;
+    border: 1px solid black;
+ }
+
+ .card_style{
+   cursor: pointer;
+   transition: .3s;
+}
+
+.card_style:hover{
+   
+}
