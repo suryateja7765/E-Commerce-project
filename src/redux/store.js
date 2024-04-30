@@ -1,7 +1,8 @@
 
-import { createStore } from "redux";
+
+import { legacy_createStore} from 'redux'
 import CombineRedc from "./main";
 
-const store=createStore(CombineRedc)
+const store=legacy_createStore(CombineRedc)
 
 export default store

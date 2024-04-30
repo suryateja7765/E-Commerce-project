@@ -1,6 +1,49 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Table from "react-bootstrap/Navbar";
+import { useParams,useNavigate } from "react-router-dom";
+import {useSelector,useDispatch} from 'react-redux'
+import { removeItem,Add, REMOVE } from "../redux/action";
+
 function CardsDetails() {
+ const [data,setData]=useState([])
+
+  const {id}= useParams();
+
+  const history=useNavigate( )
+  // removeItem
+  const dispatch = useDispatch()
+
+
+  const getData = useSelector((state) => state.CartReducer.carts);
+  // console.log(getData);
+  const compare =()=>{
+    let compareData=getData.filter((e)=>{
+      return e.id == id
+    })
+    setData(compareData)
+  }
+
+  useEffect(()=>{
+  compare()
+  },[id])
+
+//add data increment
+const send =(e)=>{
+  dispatch(Add(e))
+}
+
+  // remove items function
+
+  const handleRemove=(id)=>{
+    dispatch(removeItem(id))
+    history("/")
+  }
+
+  //data decrement
+const remove=(item)=>{
+  dispatch(REMOVE(item))
+}
+
   return (
     <div>
       <>
@@ -19,7 +62,11 @@ function CardsDetails() {
             className="container"
             style={{ marginLeft: "270px", marginTop: "80px" }}
           >
-            <div
+            {
+              data.map((ele)=>{
+                return(
+                  <>
+                   <div
               className="itemDetails"
               style={{
                 display: "flex",
@@ -34,31 +81,42 @@ function CardsDetails() {
               <div className="itemsImg">
                 <img
                   alt="noIMg"
-                  style={{ width: "400px" }}
-                  src="https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg?auto=compress&cs=tinysrgb&w=600"
+                  style={{ width: "300px" }}
+                  src={ele.imgdata}
                 ></img>
               </div>
               <div
                 className="details"
-                style={{ marginLeft: "70px", marginTop: "0px" }}
+                style={{ marginLeft: "70px", marginTop: "30px" }}
               >
                 <Table>
                   <tr >
                     <td >
-                      <p><b>Order:</b> Masala Theoryy</p>
-                      <p><b>Price:</b> ₹300</p>
-                      <p><b>Dishes:</b> North INdian , Biryani</p>
-                      <p><b>Total:</b> ₹300</p>
+                      <p><b>Order:</b> {ele.rname}</p>
+                      <p><b>Price:</b> ₹{ele.price}</p>
+                      <p><b>Dishes:</b> {ele.address}</p>
+                      <p><b>Total:</b> ₹{ele.price * ele.qnty}</p>
+                      {/* increment and decrement---- */}
+                      <div style={{marginTop:"5px",display:"flex", justifyContent:"space-between",alignItems:"center",width:100, cursor:"pointer", color:"black", backgroundColor:"grey"}}>
+                      <span style={{fontSize:"24px"}} onClick={ele.qnty <=1 ? ()=>handleRemove(ele.id) : ()=>remove(ele)}>-</span>
+                      <span style={{fontSize:"22"}}>{ele.qnty}</span>
+                      <span style={{fontSize:"24"}} onClick={()=>send(ele)}>+</span>
+                      </div>
                     </td>
                     <td >
-                      <p><b>Rating:</b><span style={{backgroundColor:"green", padding:"2px 5px ", borderRadius:"5px" , color:"#fff"}}>3.5★</span></p>
-                      <p><b>Review:</b> 1175+ order been placed </p>
-                      <p style={{padding:"px"}}><b>Remove:</b> <i style={{color:"red", fontSize:"20px", cursor:"pointer"}} className="fas fa-trash"></i> </p>
+                      <p><b>Rating:</b><span style={{backgroundColor:"green", padding:"2px 5px ", borderRadius:"5px" , color:"#fff"}}>{ele.rating}★</span></p>
+                      <p><b>Review:</b> {ele.somedata}</p>
+                      <p style={{padding:"px"}}><b>Remove:</b> <i style={{color:"red", fontSize:"20px", cursor:"pointer"}} className="fas fa-trash" onClick={()=>handleRemove(ele.id)}></i> </p>
                     </td>
                   </tr>
                 </Table>
               </div>
             </div>
+                  </>
+                )
+              })
+            }
+           
           </section>
         </div>
       </>
@@ -67,3 +125,5 @@ function CardsDetails() {
 }
 
 export default CardsDetails;
+
+

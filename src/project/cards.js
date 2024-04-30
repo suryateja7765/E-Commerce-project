@@ -3,9 +3,17 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Cardsdata from './cardsData';
+import {useDispatch} from 'react-redux'
+import { Add } from '../redux/action';
 
 export default function Carts() {
     const [data, setData] = useState(Cardsdata);
+
+    const dispatch=useDispatch()
+
+    const send =(e)=>{
+        dispatch(Add(e))
+    }
 
     return (
         <div className='cards-container'>
@@ -24,7 +32,7 @@ export default function Carts() {
                                     <b>price</b>:₹{element.price}
                                 </Card.Text>
                                 <div style={{display:"flex", justifyContent:"center", alignContent:"center"}}>
-                                <Button variant="warning" >Add To Cart</Button>
+                                <Button variant="warning" onClick={()=> send(element)} >Add To Cart</Button>
                                 </div>
                             </Card.Body>
                         </Card>
